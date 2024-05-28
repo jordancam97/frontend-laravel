@@ -60,7 +60,7 @@ const ShowEmpleados = () => {
                     <PencilSquare />
                   </Link>
                   <button
-                    oncClick={() => justDelete(empleado.id)}
+                    onClick={() => justDelete(empleado.id)}
                     className="btn btn-danger"
                   >
                     <TrashFill />
