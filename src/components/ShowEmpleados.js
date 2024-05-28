@@ -3,6 +3,7 @@ import axios from "axios";
 import { Link } from "react-router-dom";
 import { PencilSquare, TrashFill, PersonFillAdd } from "react-bootstrap-icons";
 import { ChevronLeft, ChevronRight } from "react-bootstrap-icons";
+import ModalConfirmDelete from './ModalConfirmDelete'; // Importa el componente ModalConfirmDelete
 
 const endpoint = "http://localhost:8000/api";
 
@@ -12,6 +13,8 @@ const ShowEmpleados = () => {
   const [itemsPerPage] = useState(5);
   const [totalPages, setTotalPages] = useState(0);
   const [loading, setLoading] = useState(true);
+  const [showModal, setShowModal] = useState(false);
+  const [deleteId, setDeleteId] = useState(null);
 
   useEffect(() => {
     getAll();
@@ -39,6 +42,7 @@ const ShowEmpleados = () => {
     if (currentPage > Math.ceil(response.data.length / itemsPerPage)) {
       setCurrentPage(Math.ceil(response.data.length / itemsPerPage));
     }
+    setShowModal(false);
   };
 
   const indexOfLastItem = currentPage * itemsPerPage;
@@ -59,15 +63,26 @@ const ShowEmpleados = () => {
     }
   };
 
+  const handleShowModal = (id) => {
+    setShowModal(true);
+    setDeleteId(id);
+  };
+
+  const handleCloseModal = () => {
+    setShowModal(false);
+  };
+
+  
+
   return (
     <div
       className="px-4 d-flex justify-content-center align-items-center"
       style={{ minHeight: "100vh" }}
     >
-      <div class="card m-2">
-        <h5 class="card-header">Crud React + Laravel</h5>
-        <div class="card-body">
-          <h6 class="card-title">Listado de empleados en el sistema</h6>
+      <div className="card m-2">
+        <h5 className="card-header">Crud React + Laravel</h5>
+        <div className="card-body">
+          <h6 className="card-title">Listado de empleados en el sistema</h6>
           <div className="text-start">
             <Link
               to="/create"
@@ -76,15 +91,13 @@ const ShowEmpleados = () => {
               <PersonFillAdd size={18} /> Agregar un nuevo empleado
             </Link>
 
-            
-
             {loading ? (
               <p>Cargando...</p>
             ) : empleados.length === 0 ? (
               <p>¡Oops! Parece que aún no hay registros en nuestra base de datos de empleados.</p>
             ) : (
-              <div class="table table-responsive">
-                <table class="table table-sm table-striped table-bordered align-middle ">
+              <div className="table table-responsive">
+                <table className="table table-sm table-striped table-bordered align-middle ">
                   <thead className="bg-primary text-white align-middle">
                     <tr>
                       <th>Nombre</th>
@@ -116,7 +129,7 @@ const ShowEmpleados = () => {
                               <PencilSquare />
                             </Link>
                             <button
-                              onClick={() => justDelete(empleado.id)}
+                              onClick={() => handleShowModal(empleado.id)}
                               className="btn btn-danger ms-2"
                             >
                               <TrashFill />
@@ -175,6 +188,11 @@ const ShowEmpleados = () => {
           </div>
         </div>
       </div>
+      <ModalConfirmDelete
+        show={showModal}
+        handleClose={handleCloseModal}
+        handleDelete={() => justDelete(deleteId)}
+      />
     </div>
   );
 };

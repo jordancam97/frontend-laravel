@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
 import { Link } from "react-router-dom";
+import Alert from "./Alert";
 
 const endpoint = "http://localhost:8000/api/empleado/";
 
@@ -13,6 +14,7 @@ const EditEmpleados = () => {
   const [telefono, setTelefono] = useState("");
   const [pais, setPais] = useState("");
   const [ciudad, setCiudad] = useState("");
+  const [showAlert, setShowAlert] = useState(false);
 
   const navigate = useNavigate();
   const { id } = useParams();
@@ -28,7 +30,11 @@ const EditEmpleados = () => {
       pais: pais,
       ciudad: ciudad,
     });
-    navigate("/");
+    setShowAlert(true);
+    setTimeout(() => {
+      setShowAlert(false);
+      navigate("/");
+    }, 3000);
   };
 
   useEffect(() => {
@@ -56,6 +62,9 @@ const EditEmpleados = () => {
         <div class="card-body">
           <h6 class="card-title">Editar empleado</h6>
           <div className="text-start mt-3">
+          <div className="text-start mt-3">
+            {showAlert && <Alert message="Usuario actualizado exitosamente" />}
+          </div>
             <form onSubmit={update}>
               <div className="row">
                 <div className="col-md-6 mb-3">
@@ -68,6 +77,7 @@ const EditEmpleados = () => {
                     onChange={(e) => setNombre(e.target.value)}
                     type="text"
                     className="form-control"
+                    maxLength={20}
                     required
                   />
                 </div>
@@ -81,6 +91,7 @@ const EditEmpleados = () => {
                     onChange={(e) => setApellido(e.target.value)}
                     type="text"
                     className="form-control"
+                    maxLength={20}
                     required
                   />
                 </div>
@@ -94,6 +105,7 @@ const EditEmpleados = () => {
                     onChange={(e) => setRazon(e.target.value)}
                     type="text"
                     className="form-control"
+                    maxLength={50}
                     required
                   />
                 </div>
@@ -107,6 +119,8 @@ const EditEmpleados = () => {
                     onChange={(e) => setCedula(e.target.value)}
                     type="number"
                     className="form-control"
+                    pattern="[0-9]{1,}" title="Solo se permiten números"
+                    max="9999999999999"
                     required
                   />
                 </div>
@@ -120,6 +134,8 @@ const EditEmpleados = () => {
                     onChange={(e) => setTelefono(e.target.value)}
                     type="number"
                     className="form-control"
+                    pattern="[0-9]{1,}" title="Solo se permiten números"
+                    max="999999999999"
                     required
                   />
                 </div>
@@ -133,6 +149,7 @@ const EditEmpleados = () => {
                     onChange={(e) => setPais(e.target.value)}
                     type="text"
                     className="form-control"
+                    maxLength={50}
                     required
                   />
                 </div>
@@ -146,6 +163,7 @@ const EditEmpleados = () => {
                     onChange={(e) => setCiudad(e.target.value)}
                     type="text"
                     className="form-control"
+                    maxLength={50}
                     required
                   />
                 </div>
