@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
+import Alert from "./Alert";
 
 const endpoint = "http://localhost:8000/api/empleado";
 
@@ -13,6 +14,7 @@ const CreateEmpleados = () => {
   const [telefono, setTelefono] = useState("");
   const [pais, setPais] = useState("");
   const [ciudad, setCiudad] = useState("");
+  const [showAlert, setShowAlert] = useState(false);
 
   const navigate = useNavigate();
 
@@ -27,7 +29,11 @@ const CreateEmpleados = () => {
       pais: pais,
       ciudad: ciudad,
     });
-    navigate("/");
+    setShowAlert(true);
+    setTimeout(() => {
+      setShowAlert(false);
+      navigate("/");
+    }, 3000);
   };
 
   return (
@@ -40,6 +46,7 @@ const CreateEmpleados = () => {
         <div class="card-body">
           <h6 class="card-title">Agregar un nuevo empleado</h6>
           <div className="text-start mt-3">
+            {showAlert && <Alert message="Usuario creado exitosamente" />}
             <form onSubmit={store}>
               <div className="row">
                 <div className="col-md-6 mb-3">
@@ -52,6 +59,7 @@ const CreateEmpleados = () => {
                     onChange={(e) => setNombre(e.target.value)}
                     type="text"
                     className="form-control"
+                    maxLength={20}
                     required
                   />
                 </div>
@@ -65,6 +73,7 @@ const CreateEmpleados = () => {
                     onChange={(e) => setApellido(e.target.value)}
                     type="text"
                     className="form-control"
+                    maxLength={20}
                     required
                   />
                 </div>
@@ -78,6 +87,7 @@ const CreateEmpleados = () => {
                     onChange={(e) => setRazon(e.target.value)}
                     type="text"
                     className="form-control"
+                    maxLength={50}
                     required
                   />
                 </div>
@@ -91,6 +101,8 @@ const CreateEmpleados = () => {
                     onChange={(e) => setCedula(e.target.value)}
                     type="number"
                     className="form-control"
+                    pattern="[0-9]{1,}" title="Solo se permiten números"
+                    max="9999999999999"
                     required
                   />
                 </div>
@@ -104,6 +116,8 @@ const CreateEmpleados = () => {
                     onChange={(e) => setTelefono(e.target.value)}
                     type="number"
                     className="form-control"
+                    pattern="[0-9]{1,}" title="Solo se permiten números"
+                    max="999999999999"
                     required
                   />
                 </div>
@@ -117,6 +131,7 @@ const CreateEmpleados = () => {
                     onChange={(e) => setPais(e.target.value)}
                     type="text"
                     className="form-control"
+                    maxLength={50}
                     required
                   />
                 </div>
@@ -130,6 +145,7 @@ const CreateEmpleados = () => {
                     onChange={(e) => setCiudad(e.target.value)}
                     type="text"
                     className="form-control"
+                    maxLength={50}
                     required
                   />
                 </div>
