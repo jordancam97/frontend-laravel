@@ -1,56 +1,37 @@
-import React, { useEffect, useState } from "react";
-import axios from "axios";
-import { useNavigate, useParams } from "react-router-dom";
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 import Alert from "./Alert";
 
-const endpoint = "http://localhost:8000/api/empleado/";
-
-const EditEmpleados = () => {
-  const [nombre, setNombre] = useState("");
-  const [apellido, setApellido] = useState("");
-  const [razon, setRazon] = useState("");
-  const [cedula, setCedula] = useState("");
-  const [telefono, setTelefono] = useState("");
-  const [pais, setPais] = useState("");
-  const [ciudad, setCiudad] = useState("");
+const EmpleadoForm = ({ initialValues, onSubmit, formTitle, submitButtonLabel }) => {
+  const [nombre, setNombre] = useState(initialValues.nombre || "");
+  const [apellido, setApellido] = useState(initialValues.apellido || "");
+  const [razon, setRazon] = useState(initialValues.razon_social || "");
+  const [cedula, setCedula] = useState(initialValues.cedula || "");
+  const [telefono, setTelefono] = useState(initialValues.telefono || "");
+  const [pais, setPais] = useState(initialValues.pais || "");
+  const [ciudad, setCiudad] = useState(initialValues.ciudad || "");
   const [showAlert, setShowAlert] = useState(false);
 
   const navigate = useNavigate();
-  const { id } = useParams();
 
-  const update = async (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    await axios.put(`${endpoint}${id}`, {
-      nombre: nombre,
-      apellido: apellido,
+    await onSubmit({
+      nombre,
+      apellido,
       razon_social: razon,
-      cedula: cedula,
-      telefono: telefono,
-      pais: pais,
-      ciudad: ciudad,
+      cedula,
+      telefono,
+      pais,
+      ciudad,
     });
     setShowAlert(true);
     setTimeout(() => {
       setShowAlert(false);
       navigate("/");
-    }, 3000);
+    }, 2000);
   };
-
-  useEffect(() => {
-    const getEmployerById = async () => {
-      const response = await axios.get(`${endpoint}${id}`);
-      setNombre(response.data.nombre);
-      setApellido(response.data.apellido);
-      setRazon(response.data.razon_social);
-      setCedula(response.data.cedula);
-      setTelefono(response.data.telefono);
-      setPais(response.data.pais);
-      setCiudad(response.data.ciudad);
-    };
-    getEmployerById();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
 
   const handleInput = (setter) => (e) => {
     const { value } = e.target;
@@ -65,17 +46,13 @@ const EditEmpleados = () => {
       className="px-4 d-flex justify-content-center align-items-center"
       style={{ minHeight: "100vh" }}
     >
-      <div class="card m-2">
-        <h5 class="card-header">Crud React + Laravel</h5>
-        <div class="card-body">
-          <h6 class="card-title">Editar empleado</h6>
+      <div className="card m-2">
+        <h5 className="card-header">Crud React + Laravel</h5>
+        <div className="card-body">
+          <h6 className="card-title">{formTitle}</h6>
           <div className="text-start mt-3">
-            <div className="text-start mt-3">
-              {showAlert && (
-                <Alert message="Usuario actualizado exitosamente" />
-              )}
-            </div>
-            <form onSubmit={update}>
+            {showAlert && <Alert message="Operación realizada exitosamente" />}
+            <form onSubmit={handleSubmit}>
               <div className="row">
                 <div className="col-md-6 mb-3">
                   <label htmlFor="nombre" className="form-label">
@@ -193,7 +170,7 @@ const EditEmpleados = () => {
                   Regresar
                 </Link>
                 <button type="submit" className="btn btn-primary">
-                  Actualizar
+                  {submitButtonLabel}
                 </button>
               </div>
             </form>
@@ -204,4 +181,4 @@ const EditEmpleados = () => {
   );
 };
 
-export default EditEmpleados;
+export default EmpleadoForm;
