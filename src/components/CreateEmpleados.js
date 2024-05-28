@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 import Alert from "./Alert";
 
+
 const endpoint = "http://localhost:8000/api/empleado";
 
 const CreateEmpleados = () => {
@@ -36,6 +37,14 @@ const CreateEmpleados = () => {
     }, 3000);
   };
 
+  const handleInput = (setter) => (e) => {
+    const { value } = e.target;
+    const regex = /^[a-zA-ZñÑáéíóúÁÉÍÓÚ\s]*$/;
+    if (regex.test(value)) {
+      setter(value);
+    }
+  };
+
   return (
     <div
       className="px-4 d-flex justify-content-center align-items-center"
@@ -56,10 +65,12 @@ const CreateEmpleados = () => {
                   <input
                     id="nombre"
                     value={nombre}
-                    onChange={(e) => setNombre(e.target.value)}
+                    onChange={handleInput(setNombre)}
                     type="text"
                     className="form-control"
+                    minLength={4}
                     maxLength={20}
+                    title="Solo se permiten letras"
                     required
                   />
                 </div>
@@ -70,9 +81,11 @@ const CreateEmpleados = () => {
                   <input
                     id="apellido"
                     value={apellido}
-                    onChange={(e) => setApellido(e.target.value)}
+                    onChange={handleInput(setApellido)}
                     type="text"
                     className="form-control"
+                    title="Solo se permiten letras"
+                    minLength={4}
                     maxLength={20}
                     required
                   />
@@ -101,7 +114,8 @@ const CreateEmpleados = () => {
                     onChange={(e) => setCedula(e.target.value)}
                     type="number"
                     className="form-control"
-                    pattern="[0-9]{1,}" title="Solo se permiten números"
+                    pattern="[0-9]{1,}"
+                    title="Solo se permiten números"
                     max="9999999999999"
                     required
                   />
@@ -116,7 +130,8 @@ const CreateEmpleados = () => {
                     onChange={(e) => setTelefono(e.target.value)}
                     type="number"
                     className="form-control"
-                    pattern="[0-9]{1,}" title="Solo se permiten números"
+                    pattern="[0-9]{1,}"
+                    title="Solo se permiten números"
                     max="999999999999"
                     required
                   />
@@ -128,9 +143,11 @@ const CreateEmpleados = () => {
                   <input
                     id="pais"
                     value={pais}
-                    onChange={(e) => setPais(e.target.value)}
+                    onChange={handleInput(setPais)}
                     type="text"
                     className="form-control"
+                    title="Solo se permiten letras"
+                    minLength={4}
                     maxLength={50}
                     required
                   />
@@ -142,9 +159,10 @@ const CreateEmpleados = () => {
                   <input
                     id="ciudad"
                     value={ciudad}
-                    onChange={(e) => setCiudad(e.target.value)}
+                    onChange={handleInput(setCiudad)}
                     type="text"
                     className="form-control"
+                    title="Solo se permiten letras"
                     maxLength={50}
                     required
                   />

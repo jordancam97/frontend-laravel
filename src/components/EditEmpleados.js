@@ -52,6 +52,14 @@ const EditEmpleados = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  const handleInput = (setter) => (e) => {
+    const { value } = e.target;
+    const regex = /^[a-zA-ZñÑáéíóúÁÉÍÓÚ\s]*$/;
+    if (regex.test(value)) {
+      setter(value);
+    }
+  };
+
   return (
     <div
       className="px-4 d-flex justify-content-center align-items-center"
@@ -62,9 +70,11 @@ const EditEmpleados = () => {
         <div class="card-body">
           <h6 class="card-title">Editar empleado</h6>
           <div className="text-start mt-3">
-          <div className="text-start mt-3">
-            {showAlert && <Alert message="Usuario actualizado exitosamente" />}
-          </div>
+            <div className="text-start mt-3">
+              {showAlert && (
+                <Alert message="Usuario actualizado exitosamente" />
+              )}
+            </div>
             <form onSubmit={update}>
               <div className="row">
                 <div className="col-md-6 mb-3">
@@ -74,10 +84,12 @@ const EditEmpleados = () => {
                   <input
                     id="nombre"
                     value={nombre}
-                    onChange={(e) => setNombre(e.target.value)}
+                    onChange={handleInput(setNombre)}
                     type="text"
                     className="form-control"
+                    minLength={4}
                     maxLength={20}
+                    title="Solo se permiten letras"
                     required
                   />
                 </div>
@@ -88,9 +100,11 @@ const EditEmpleados = () => {
                   <input
                     id="apellido"
                     value={apellido}
-                    onChange={(e) => setApellido(e.target.value)}
+                    onChange={handleInput(setApellido)}
                     type="text"
                     className="form-control"
+                    title="Solo se permiten letras"
+                    minLength={4}
                     maxLength={20}
                     required
                   />
@@ -119,7 +133,8 @@ const EditEmpleados = () => {
                     onChange={(e) => setCedula(e.target.value)}
                     type="number"
                     className="form-control"
-                    pattern="[0-9]{1,}" title="Solo se permiten números"
+                    pattern="[0-9]{1,}"
+                    title="Solo se permiten números"
                     max="9999999999999"
                     required
                   />
@@ -134,7 +149,8 @@ const EditEmpleados = () => {
                     onChange={(e) => setTelefono(e.target.value)}
                     type="number"
                     className="form-control"
-                    pattern="[0-9]{1,}" title="Solo se permiten números"
+                    pattern="[0-9]{1,}"
+                    title="Solo se permiten números"
                     max="999999999999"
                     required
                   />
@@ -146,9 +162,11 @@ const EditEmpleados = () => {
                   <input
                     id="pais"
                     value={pais}
-                    onChange={(e) => setPais(e.target.value)}
+                    onChange={handleInput(setPais)}
                     type="text"
                     className="form-control"
+                    title="Solo se permiten letras"
+                    minLength={4}
                     maxLength={50}
                     required
                   />
@@ -160,9 +178,10 @@ const EditEmpleados = () => {
                   <input
                     id="ciudad"
                     value={ciudad}
-                    onChange={(e) => setCiudad(e.target.value)}
+                    onChange={handleInput(setCiudad)}
                     type="text"
                     className="form-control"
+                    title="Solo se permiten letras"
                     maxLength={50}
                     required
                   />

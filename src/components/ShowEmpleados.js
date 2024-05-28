@@ -3,7 +3,8 @@ import axios from "axios";
 import { Link } from "react-router-dom";
 import { PencilSquare, TrashFill, PersonFillAdd } from "react-bootstrap-icons";
 import { ChevronLeft, ChevronRight } from "react-bootstrap-icons";
-import ModalConfirmDelete from './ModalConfirmDelete'; // Importa el componente ModalConfirmDelete
+import ModalConfirmDelete from "./ModalConfirmDelete";
+import Spinner from "react-bootstrap/Spinner";
 
 const endpoint = "http://localhost:8000/api";
 
@@ -72,8 +73,6 @@ const ShowEmpleados = () => {
     setShowModal(false);
   };
 
-  
-
   return (
     <div
       className="px-4 d-flex justify-content-center align-items-center"
@@ -84,63 +83,78 @@ const ShowEmpleados = () => {
         <div className="card-body">
           <h6 className="card-title">Listado de empleados en el sistema</h6>
           <div className="text-start">
-            <Link
-              to="/create"
-              className="btn btn-primary btn-sm mt-2 mb-3 text-white"
-            >
-              <PersonFillAdd size={18} /> Agregar un nuevo empleado
-            </Link>
-
             {loading ? (
-              <p>Cargando...</p>
-            ) : empleados.length === 0 ? (
-              <p>¡Oops! Parece que aún no hay registros en nuestra base de datos de empleados.</p>
-            ) : (
-              <div className="table table-responsive">
-                <table className="table table-sm table-striped table-bordered align-middle ">
-                  <thead className="bg-primary text-white align-middle">
-                    <tr>
-                      <th>Nombre</th>
-                      <th>Apellido</th>
-                      <th>Razón social</th>
-                      <th>Cédula</th>
-                      <th>Teléfono</th>
-                      <th>País</th>
-                      <th>Ciudad</th>
-                      <th>Acciones</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {currentItems.map((empleado) => (
-                      <tr key={empleado.id}>
-                        <td>{empleado.nombre}</td>
-                        <td>{empleado.apellido}</td>
-                        <td>{empleado.razon_social}</td>
-                        <td>{empleado.cedula}</td>
-                        <td>{empleado.telefono}</td>
-                        <td>{empleado.pais}</td>
-                        <td>{empleado.ciudad}</td>
-                        <td>
-                          <div className="d-flex justify-content-center align-items-center">
-                            <Link
-                              to={`/edit/${empleado.id}`}
-                              className="btn btn-warning me-2"
-                            >
-                              <PencilSquare />
-                            </Link>
-                            <button
-                              onClick={() => handleShowModal(empleado.id)}
-                              className="btn btn-danger ms-2"
-                            >
-                              <TrashFill />
-                            </button>
-                          </div>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
+              <div className="d-flex justify-content-center flex-column align-items-center mt-3">
+                <Spinner animation="border" variant="primary" />
+                <p className="mt-1">Cargando...</p>
               </div>
+            ) : empleados.length === 0 ? (
+              <>
+                <Link
+                  to="/create"
+                  className="btn btn-primary btn-sm mt-2 mb-3 text-white"
+                >
+                  <PersonFillAdd size={18} /> Agregar un nuevo empleado
+                </Link>
+                <p>
+                  ¡Oops! Parece que aún no hay registros en nuestra base de
+                  datos de empleados.
+                </p>
+              </>
+            ) : (
+              <>
+                <Link
+                  to="/create"
+                  className="btn btn-primary btn-sm mt-2 mb-3 text-white"
+                >
+                  <PersonFillAdd size={18} /> Agregar un nuevo empleado
+                </Link>
+                <div className="table table-responsive">
+                  <table className="table table-sm table-striped table-bordered align-middle ">
+                    <thead className="bg-primary text-white align-middle">
+                      <tr>
+                        <th>Nombre</th>
+                        <th>Apellido</th>
+                        <th>Razón social</th>
+                        <th>Cédula</th>
+                        <th>Teléfono</th>
+                        <th>País</th>
+                        <th>Ciudad</th>
+                        <th>Acciones</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {currentItems.map((empleado) => (
+                        <tr key={empleado.id}>
+                          <td>{empleado.nombre}</td>
+                          <td>{empleado.apellido}</td>
+                          <td>{empleado.razon_social}</td>
+                          <td>{empleado.cedula}</td>
+                          <td>{empleado.telefono}</td>
+                          <td>{empleado.pais}</td>
+                          <td>{empleado.ciudad}</td>
+                          <td>
+                            <div className="d-flex justify-content-center align-items-center">
+                              <Link
+                                to={`/edit/${empleado.id}`}
+                                className="btn btn-warning me-2"
+                              >
+                                <PencilSquare />
+                              </Link>
+                              <button
+                                onClick={() => handleShowModal(empleado.id)}
+                                className="btn btn-danger ms-2"
+                              >
+                                <TrashFill />
+                              </button>
+                            </div>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </>
             )}
 
             {empleados.length > itemsPerPage && (
